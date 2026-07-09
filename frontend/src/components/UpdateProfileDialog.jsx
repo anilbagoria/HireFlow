@@ -71,79 +71,79 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     return (
         <div>
             <Dialog open={open}>
-                <DialogContent className="sm:max-w-[425px]" onInteractOutside={() => setOpen(false)}>
+                <DialogContent className='sm:max-w-[425px] border-white/10 bg-[#081421] text-slate-100 shadow-[0_24px_90px_rgba(0,0,0,0.45)]' onInteractOutside={() => setOpen(false)}>
                     <DialogHeader>
                         <DialogTitle>Update Profile</DialogTitle>
                     </DialogHeader>
                     <form onSubmit={submitHandler}>
                         <div className='grid gap-4 py-4'>
                             <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="name" className="text-right">Name</Label>
+                                <Label htmlFor='name' className='text-right text-slate-200'>Name</Label>
                                 <Input
                                     id="name"
                                     name="name"
                                     type="text"
                                     value={input.fullname}
                                     onChange={changeEventHandler}
-                                    className="col-span-3"
+                                    className='col-span-3 border-white/10 bg-white/5 text-white'
                                 />
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="email" className="text-right">Email</Label>
+                                <Label htmlFor='email' className='text-right text-slate-200'>Email</Label>
                                 <Input
                                     id="email"
                                     name="email"
                                     type="email"
                                     value={input.email}
                                     onChange={changeEventHandler}
-                                    className="col-span-3"
+                                    className='col-span-3 border-white/10 bg-white/5 text-white'
                                 />
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="number" className="text-right">Number</Label>
+                                <Label htmlFor='number' className='text-right text-slate-200'>Number</Label>
                                 <Input
                                     id="number"
                                     name="number"
                                     value={input.phoneNumber}
                                     onChange={changeEventHandler}
-                                    className="col-span-3"
+                                    className='col-span-3 border-white/10 bg-white/5 text-white'
                                 />
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="bio" className="text-right">Bio</Label>
+                                <Label htmlFor='bio' className='text-right text-slate-200'>Bio</Label>
                                 <Input
                                     id="bio"
                                     name="bio"
                                     value={input.bio}
                                     onChange={changeEventHandler}
-                                    className="col-span-3"
+                                    className='col-span-3 border-white/10 bg-white/5 text-white'
                                 />
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="skills" className="text-right">Skills</Label>
+                                <Label htmlFor='skills' className='text-right text-slate-200'>Skills</Label>
                                 <Input
                                     id="skills"
                                     name="skills"
                                     value={input.skills}
                                     onChange={changeEventHandler}
-                                    className="col-span-3"
+                                    className='col-span-3 border-white/10 bg-white/5 text-white'
                                 />
                             </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
-                                <Label htmlFor="file" className="text-right">Resume</Label>
+                                <Label htmlFor='file' className='text-right text-slate-200'>Resume</Label>
                                 <Input
                                     id="file"
                                     name="file"
                                     type="file"
                                     accept="application/pdf"
                                     onChange={fileChangeHandler}
-                                    className="col-span-3"
+                                    className='col-span-3 border-white/10 bg-white/5 text-white'
                                 />
                             </div>
                         </div>
                         <DialogFooter>
                             {
-                                loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4">Update</Button>
+                                loading ? <Button className='my-4 w-full bg-gradient-to-r from-[#f97316] to-[#ec4899] text-white'> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type='submit' className='my-4 w-full bg-gradient-to-r from-[#f97316] to-[#ec4899] text-white'>Update</Button>
                             }
                         </DialogFooter>
                     </form>

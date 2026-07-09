@@ -54,34 +54,37 @@ const Login = () => {
         }
     },[])
     return (
-        <div>
+        <div className='relative min-h-screen bg-[#06131f] text-white'>
             <Navbar />
-            <div className='flex items-center justify-center max-w-7xl mx-auto'>
-                <form onSubmit={submitHandler} className='w-1/2 border border-gray-200 rounded-md p-4 my-10'>
-                    <h1 className='font-bold text-xl mb-5'>Login</h1>
+            <div className='mx-auto flex max-w-7xl items-center justify-center px-4 py-10'>
+                <form onSubmit={submitHandler} className='w-full max-w-md rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,26,38,0.96),rgba(6,20,31,0.96))] p-6 shadow-[0_24px_90px_rgba(0,0,0,0.35)] sm:p-8'>
+                    <h1 className='mb-2 text-3xl font-black tracking-tight'>Login</h1>
+                    <p className='mb-6 text-sm text-slate-400'>Welcome back to HireFlow.</p>
                     <div className='my-2'>
-                        <Label>Email</Label>
+                        <Label className='text-slate-200'>Email</Label>
                         <Input
                             type="email"
                             value={input.email}
                             name="email"
                             onChange={changeEventHandler}
                             placeholder="patel@gmail.com"
+                            className='mt-1 border-white/10 bg-white/5 text-white placeholder:text-slate-500'
                         />
                     </div>
 
                     <div className='my-2'>
-                        <Label>Password</Label>
+                        <Label className='text-slate-200'>Password</Label>
                         <Input
                             type="password"
                             value={input.password}
                             name="password"
                             onChange={changeEventHandler}
-                            placeholder="patel@gmail.com"
+                            placeholder="********"
+                            className='mt-1 border-white/10 bg-white/5 text-white placeholder:text-slate-500'
                         />
                     </div>
                     <div className='flex items-center justify-between'>
-                        <RadioGroup className="flex items-center gap-4 my-5">
+                        <RadioGroup className='my-5 flex items-center gap-4'>
                             <div className="flex items-center space-x-2">
                                 <Input
                                     type="radio"
@@ -91,7 +94,7 @@ const Login = () => {
                                     onChange={changeEventHandler}
                                     className="cursor-pointer"
                                 />
-                                <Label htmlFor="r1">Student</Label>
+                                <Label htmlFor="r1" className='text-slate-200'>Student</Label>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <Input
@@ -102,14 +105,14 @@ const Login = () => {
                                     onChange={changeEventHandler}
                                     className="cursor-pointer"
                                 />
-                                <Label htmlFor="r2">Recruiter</Label>
+                                <Label htmlFor="r2" className='text-slate-200'>Recruiter</Label>
                             </div>
                         </RadioGroup>
                     </div>
                     {
-                        loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4">Login</Button>
+                        loading ? <Button className='my-4 w-full bg-gradient-to-r from-[#f97316] to-[#ec4899] text-white'> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type='submit' className='my-4 w-full bg-gradient-to-r from-[#f97316] to-[#ec4899] text-white hover:from-[#fb923c] hover:to-[#f472b6]'>Login</Button>
                     }
-                    <span className='text-sm'>Don't have an account? <Link to="/signup" className='text-blue-600'>Signup</Link></span>
+                    <span className='text-sm text-slate-400'>Don't have an account? <Link to="/signup" className='text-cyan-300 hover:text-cyan-200'>Signup</Link></span>
                 </form>
             </div>
         </div>

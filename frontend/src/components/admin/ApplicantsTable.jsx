@@ -27,42 +27,42 @@ const ApplicantsTable = () => {
     }
 
     return (
-        <div>
+        <div className='w-full overflow-x-auto'>
             <Table>
-                <TableCaption>A list of your recent applied user</TableCaption>
+                <TableCaption className='text-slate-400'>A list of your recent applied users</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>FullName</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Contact</TableHead>
-                        <TableHead>Resume</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
+                        <TableHead className='text-slate-300'>FullName</TableHead>
+                        <TableHead className='text-slate-300'>Email</TableHead>
+                        <TableHead className='text-slate-300'>Contact</TableHead>
+                        <TableHead className='text-slate-300'>Resume</TableHead>
+                        <TableHead className='text-slate-300'>Date</TableHead>
+                        <TableHead className='text-right text-slate-300'>Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {
                         applicants && applicants?.applications?.map((item) => (
                             <tr key={item._id}>
-                                <TableCell>{item?.applicant?.fullname}</TableCell>
-                                <TableCell>{item?.applicant?.email}</TableCell>
-                                <TableCell>{item?.applicant?.phoneNumber}</TableCell>
+                                <TableCell className='text-slate-100'>{item?.applicant?.fullname}</TableCell>
+                                <TableCell className='text-slate-300'>{item?.applicant?.email}</TableCell>
+                                <TableCell className='text-slate-300'>{item?.applicant?.phoneNumber}</TableCell>
                                 <TableCell >
                                     {
-                                        item.applicant?.profile?.resume ? <a className="text-blue-600 cursor-pointer" href={item?.applicant?.profile?.resume} target="_blank" rel="noopener noreferrer">{item?.applicant?.profile?.resumeOriginalName}</a> : <span>NA</span>
+                                        item.applicant?.profile?.resume ? <a className='cursor-pointer text-cyan-300 hover:underline' href={item?.applicant?.profile?.resume} target='_blank' rel='noopener noreferrer'>{item?.applicant?.profile?.resumeOriginalName}</a> : <span className='text-slate-400'>NA</span>
                                     }
                                 </TableCell>
-                                <TableCell>{item?.applicant.createdAt.split("T")[0]}</TableCell>
-                                <TableCell className="float-right cursor-pointer">
+                                <TableCell className='text-slate-300'>{item?.applicant.createdAt.split("T")[0]}</TableCell>
+                                <TableCell className='cursor-pointer text-right'>
                                     <Popover>
                                         <PopoverTrigger>
                                             <MoreHorizontal />
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-32">
+                                        <PopoverContent className='w-32 border-white/10 bg-[#081421] text-slate-100'>
                                             {
                                                 shortlistingStatus.map((status, index) => {
                                                     return (
-                                                        <div onClick={() => statusHandler(status, item?._id)} key={index} className='flex w-fit items-center my-2 cursor-pointer'>
+                                                        <div onClick={() => statusHandler(status, item?._id)} key={index} className='my-2 flex w-fit cursor-pointer items-center'>
                                                             <span>{status}</span>
                                                         </div>
                                                     )

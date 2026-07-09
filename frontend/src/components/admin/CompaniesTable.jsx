@@ -21,40 +21,40 @@ const CompaniesTable = () => {
         setFilterCompany(filteredCompany);
     },[companies,searchCompanyByText])
     return (
-        <div>
+        <div className='w-full overflow-x-auto'>
             <Table>
-                <TableCaption>A list of your recent registered companies</TableCaption>
+                <TableCaption className='text-slate-400'>A list of your recent registered companies</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Logo</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
+                        <TableHead className='text-slate-300'>Logo</TableHead>
+                        <TableHead className='text-slate-300'>Name</TableHead>
+                        <TableHead className='text-slate-300'>Date</TableHead>
+                        <TableHead className='text-right text-slate-300'>Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {
                         filterCompany?.map((company) => (
-                            <tr>
+                            <TableRow key={company?._id}>
                                 <TableCell>
-                                    <Avatar>
+                                    <Avatar className='border border-white/10 bg-white/5'>
                                         <AvatarImage src={company.logo}/>
                                     </Avatar>
                                 </TableCell>
-                                <TableCell>{company.name}</TableCell>
-                                <TableCell>{company.createdAt.split("T")[0]}</TableCell>
-                                <TableCell className="text-right cursor-pointer">
+                                <TableCell className='text-slate-100'>{company.name}</TableCell>
+                                <TableCell className='text-slate-300'>{company.createdAt.split("T")[0]}</TableCell>
+                                <TableCell className='cursor-pointer text-right'>
                                     <Popover>
                                         <PopoverTrigger><MoreHorizontal /></PopoverTrigger>
-                                        <PopoverContent className="w-32">
-                                            <div onClick={()=> navigate(`/admin/companies/${company._id}`)} className='flex items-center gap-2 w-fit cursor-pointer'>
+                                        <PopoverContent className='w-32 border-white/10 bg-[#081421] text-slate-100'>
+                                            <div onClick={()=> navigate(`/admin/companies/${company._id}`)} className='flex w-fit cursor-pointer items-center gap-2'>
                                                 <Edit2 className='w-4' />
                                                 <span>Edit</span>
                                             </div>
                                         </PopoverContent>
                                     </Popover>
                                 </TableCell>
-                            </tr>
+                            </TableRow>
 
                         ))
                     }

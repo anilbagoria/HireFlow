@@ -1,4 +1,5 @@
 import { Job } from "../models/job.model.js";
+import { Application } from "../models/application.model.js";
 
 // admin post krega job
 export const postJob = async (req, res) => {
@@ -39,8 +40,8 @@ export const getAllJobs = async (req, res) => {
         const keyword = req.query.keyword || "";
         const query = {
             $or: [
-                { title: { $regex: keyword, $options: "i" } },
-                { description: { $regex: keyword, $options: "i" } },
+                { title: { $regex: keyword, $options: "i" } }, // $options means  case insesitive  measn yhe sab same hh jese React , REACT , react 
+                { description: { $regex: keyword, $options: "i" } }, // $regex measn  search karns  
             ]
         };
         const jobs = await Job.find(query).populate({
@@ -98,5 +99,35 @@ export const getAdminJobs = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
+    }
+}
+
+export const deleteJob = async (req, res) => {
+    try {
+        const jobId = req.params.id;
+        const recruiterId = req.id;
+
+        const job = await Job.findOne({ _id: jobId, created_by: recruiterId });
+
+        if (!job) {
+            return res.status(404).json({
+                message: "Job not found.",
+                success: false,
+            });
+        }
+
+        await Application.deleteMany({ job: jobId });
+        await Job.findByIdAndDelete(jobId);
+
+        return res.status(200).json({
+            message: "Job deleted successfully.",
+            success: true,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Failed to delete job.",
+            success: false,
+        });
     }
 }

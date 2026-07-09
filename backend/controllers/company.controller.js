@@ -1,6 +1,6 @@
 import { Company } from "../models/company.model.js";
 import getDataUri from "../utils/datauri.js";
-import cloudinary from "../utils/cloudinary.js";
+import cloudinary, { isCloudinaryConfigured } from "../utils/cloudinary.js";
 
 export const registerCompany = async (req, res) => {
     try {
@@ -74,6 +74,18 @@ export const updateCompany = async (req, res) => {
         const { name, description, website, location } = req.body;
  
         const file = req.file;
+        if (!file) {
+            return res.status(400).json({
+                message: "Company logo is required.",
+                success: false
+            });
+        }
+        if (!isCloudinaryConfigured) {
+            return res.status(500).json({
+                message: "Cloudinary is not configured. Set CLOUD_NAME, API_KEY, and API_SECRET or their CLOUDINARY_* equivalents.",
+                success: false
+            });
+        }
         // idhar cloudinary ayega
         const fileUri = getDataUri(file);
         const cloudResponse = await cloudinary.uploader.upload(fileUri.content);

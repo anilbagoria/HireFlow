@@ -17,11 +17,11 @@ const Browse = () => {
         }
     },[])
     return (
-        <div>
+        <div className='relative min-h-screen bg-[#06131f] text-white'>
             <Navbar />
-            <div className='max-w-7xl mx-auto my-10'>
-                <h1 className='font-bold text-xl my-10'>Search Results ({allJobs.length})</h1>
-                <div className='grid grid-cols-3 gap-4'>
+            <div className='mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8'>
+                <h1 className='my-6 text-2xl font-black tracking-tight sm:my-10 sm:text-3xl'>Search Results ({allJobs.length})</h1>
+                <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-2'>
                     {
                         allJobs.map((job) => {
                             return (

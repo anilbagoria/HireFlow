@@ -25,17 +25,17 @@ const Jobs = () => {
     }, [allJobs, searchedQuery]);
 
     return (
-        <div>
+        <div className='relative min-h-screen bg-[#06131f] text-white'>
             <Navbar />
-            <div className='max-w-7xl mx-auto mt-5'>
-                <div className='flex gap-5'>
-                    <div className='w-20%'>
+            <div className='mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8'>
+                <div className='flex flex-col lg:flex-row gap-5'>
+                    <div className='w-full lg:w-[280px] lg:shrink-0'>
                         <FilterCard />
                     </div>
                     {
-                        filterJobs.length <= 0 ? <span>Job not found</span> : (
-                            <div className='flex-1 h-[88vh] overflow-y-auto pb-5'>
-                                <div className='grid grid-cols-3 gap-4'>
+                        filterJobs.length <= 0 ? <span className='text-slate-400'>Job not found</span> : (
+                            <div className='flex-1 pb-5'>
+                                <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-2'>
                                     {
                                         filterJobs.map((job) => (
                                             <motion.div

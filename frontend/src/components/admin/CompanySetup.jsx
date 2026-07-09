@@ -75,65 +75,70 @@ const CompanySetup = () => {
     },[singleCompany]);
 
     return (
-        <div>
+        <div className='relative min-h-screen bg-[#06131f] text-white'>
             <Navbar />
-            <div className='max-w-xl mx-auto my-10'>
-                <form onSubmit={submitHandler}>
-                    <div className='flex items-center gap-5 p-8'>
-                        <Button onClick={() => navigate("/admin/companies")} variant="outline" className="flex items-center gap-2 text-gray-500 font-semibold">
+            <div className='mx-auto max-w-xl px-4 py-8 sm:px-6 lg:px-8'>
+                <form onSubmit={submitHandler} className='rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,26,38,0.96),rgba(6,20,31,0.96))] p-6 shadow-[0_24px_90px_rgba(0,0,0,0.35)]'>
+                    <div className='flex items-center gap-3 py-4 sm:gap-5 sm:p-8'>
+                        <Button onClick={() => navigate("/admin/companies")} variant='outline' className='flex items-center gap-2 border-white/10 bg-white/5 font-semibold text-slate-100 hover:bg-white/10 hover:text-white'>
                             <ArrowLeft />
                             <span>Back</span>
                         </Button>
-                        <h1 className='font-bold text-xl'>Company Setup</h1>
+                        <h1 className='text-xl font-black'>Company Setup</h1>
                     </div>
-                    <div className='grid grid-cols-2 gap-4'>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                         <div>
-                            <Label>Company Name</Label>
+                            <Label className='text-slate-200'>Company Name</Label>
                             <Input
                                 type="text"
                                 name="name"
                                 value={input.name}
                                 onChange={changeEventHandler}
+                                className='border-white/10 bg-white/5 text-white'
                             />
                         </div>
                         <div>
-                            <Label>Description</Label>
+                            <Label className='text-slate-200'>Description</Label>
                             <Input
                                 type="text"
                                 name="description"
                                 value={input.description}
                                 onChange={changeEventHandler}
+                                className='border-white/10 bg-white/5 text-white'
                             />
                         </div>
                         <div>
-                            <Label>Website</Label>
+                            <Label className='text-slate-200'>Website</Label>
                             <Input
                                 type="text"
                                 name="website"
                                 value={input.website}
                                 onChange={changeEventHandler}
+                                className='border-white/10 bg-white/5 text-white'
                             />
                         </div>
                         <div>
-                            <Label>Location</Label>
+                            <Label className='text-slate-200'>Location</Label>
                             <Input
                                 type="text"
                                 name="location"
                                 value={input.location}
                                 onChange={changeEventHandler}
+                                className='border-white/10 bg-white/5 text-white'
                             />
                         </div>
                         <div>
-                            <Label>Logo</Label>
+                            <Label className='text-slate-200'>Logo</Label>
                             <Input
                                 type="file"
                                 accept="image/*"
                                 onChange={changeFileHandler}
+                                className='border-white/10 bg-white/5 text-white'
                             />
                         </div>
                     </div>
                     {
-                        loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4">Update</Button>
+                        loading ? <Button className='my-4 w-full bg-gradient-to-r from-[#f97316] to-[#ec4899] text-white'> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type='submit' className='my-4 w-full bg-gradient-to-r from-[#f97316] to-[#ec4899] text-white'>Update</Button>
                     }
                 </form>
             </div>

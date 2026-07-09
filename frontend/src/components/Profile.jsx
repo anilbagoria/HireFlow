@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Navbar from './shared/Navbar'
-import { Avatar, AvatarImage } from './ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
 import { Contact, Mail, Pen } from 'lucide-react'
 import { Badge } from './ui/badge'
@@ -19,50 +19,55 @@ const Profile = () => {
     const {user} = useSelector(store=>store.auth);
 
     return (
-        <div>
+        <div className='relative min-h-screen bg-[#06131f] text-white'>
             <Navbar />
-            <div className='max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl my-5 p-8'>
-                <div className='flex justify-between'>
+            <div className='mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8'>
+            <div className='rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,26,38,0.96),rgba(6,20,31,0.96))] p-5 shadow-[0_24px_90px_rgba(0,0,0,0.35)] sm:p-8'>
+                <div className='flex flex-col sm:flex-row sm:justify-between gap-4'>
                     <div className='flex items-center gap-4'>
-                        <Avatar className="h-24 w-24">
-                            <AvatarImage src="https://www.shutterstock.com/image-vector/circle-line-simple-design-logo-600nw-2174926871.jpg" alt="profile" />
+                        <Avatar className='h-24 w-24 border border-white/10'>
+                            <AvatarImage src={user?.profile?.profilePhoto} alt='profile' />
+                            <AvatarFallback className='bg-gradient-to-br from-cyan-400 to-orange-500 text-lg font-semibold text-white'>HF</AvatarFallback>
                         </Avatar>
                         <div>
-                            <h1 className='font-medium text-xl'>{user?.fullname}</h1>
-                            <p>{user?.profile?.bio}</p>
+                            <h1 className='font-medium text-2xl text-white'>{user?.fullname}</h1>
+                            <p className='text-slate-400'>{user?.profile?.bio}</p>
                         </div>
                     </div>
-                    <Button onClick={() => setOpen(true)} className="text-right" variant="outline"><Pen /></Button>
+                    <Button onClick={() => setOpen(true)} className='text-right border-white/10 bg-white/5 text-slate-100 hover:bg-white/10 hover:text-white' variant='outline'><Pen /></Button>
                 </div>
                 <div className='my-5'>
                     <div className='flex items-center gap-3 my-2'>
-                        <Mail />
-                        <span>{user?.email}</span>
+                        <Mail className='text-cyan-300' />
+                        <span className='text-slate-200'>{user?.email}</span>
                     </div>
                     <div className='flex items-center gap-3 my-2'>
-                        <Contact />
-                        <span>{user?.phoneNumber}</span>
+                        <Contact className='text-cyan-300' />
+                        <span className='text-slate-200'>{user?.phoneNumber}</span>
                     </div>
                 </div>
                 <div className='my-5'>
-                    <h1>Skills</h1>
-                    <div className='flex items-center gap-1'>
+                    <h1 className='font-semibold text-white'>Skills</h1>
+                    <div className='flex flex-wrap items-center gap-1'>
                         {
-                            user?.profile?.skills.length !== 0 ? user?.profile?.skills.map((item, index) => <Badge key={index}>{item}</Badge>) : <span>NA</span>
+                            user?.profile?.skills.length !== 0 ? user?.profile?.skills.map((item, index) => <Badge key={index} className='border border-white/10 bg-white/5 text-cyan-200'>{item}</Badge>) : <span className='text-slate-400'>NA</span>
                         }
                     </div>
                 </div>
                 <div className='grid w-full max-w-sm items-center gap-1.5'>
-                    <Label className="text-md font-bold">Resume</Label>
+                    <Label className='text-md font-bold text-white'>Resume</Label>
                     {
-                        isResume ? <a target='blank' href={user?.profile?.resume} className='text-blue-500 w-full hover:underline cursor-pointer'>{user?.profile?.resumeOriginalName}</a> : <span>NA</span>
+                        isResume ? <a target='blank' href={user?.profile?.resume} className='w-full cursor-pointer text-cyan-300 hover:underline'>{user?.profile?.resumeOriginalName}</a> : <span className='text-slate-400'>NA</span>
                     }
                 </div>
             </div>
-            <div className='max-w-4xl mx-auto bg-white rounded-2xl'>
-                <h1 className='font-bold text-lg my-5'>Applied Jobs</h1>
+            </div>
+            <div className='mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8'>
+            <div className='rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,26,38,0.96),rgba(6,20,31,0.96))] p-5 shadow-[0_24px_90px_rgba(0,0,0,0.35)]'>
+                <h1 className='my-5 text-lg font-bold text-white'>Applied Jobs</h1>
                 {/* Applied Job Table   */}
                 <AppliedJobTable />
+            </div>
             </div>
             <UpdateProfileDialog open={open} setOpen={setOpen}/>
         </div>

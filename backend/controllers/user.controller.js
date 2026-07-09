@@ -2,7 +2,7 @@ import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
-import cloudinary from "../utils/cloudinary.js";
+import cloudinary, { isCloudinaryConfigured } from "../utils/cloudinary.js";
 
 export const register = async (req, res) => {
     try {
@@ -15,6 +15,18 @@ export const register = async (req, res) => {
             });
         };
         const file = req.file;
+        if (!file) {
+            return res.status(400).json({
+                message: "Profile photo is required.",
+                success: false
+            });
+        }
+        if (!isCloudinaryConfigured) {
+            return res.status(500).json({
+                message: "Cloudinary is not configured. Set CLOUD_NAME, API_KEY, and API_SECRET or their CLOUDINARY_* equivalents.",
+                success: false
+            });
+        }
         const fileUri = getDataUri(file);
         const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
 
@@ -116,6 +128,18 @@ export const updateProfile = async (req, res) => {
         const { fullname, email, phoneNumber, bio, skills } = req.body;
         
         const file = req.file;
+        if (!file) {
+            return res.status(400).json({
+                message: "Resume file is required.",
+                success: false
+            });
+        }
+        if (!isCloudinaryConfigured) {
+            return res.status(500).json({
+                message: "Cloudinary is not configured. Set CLOUD_NAME, API_KEY, and API_SECRET or their CLOUDINARY_* equivalents.",
+                success: false
+            });
+        }
         // cloudinary ayega idhar
         const fileUri = getDataUri(file);
         const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
