@@ -4,6 +4,17 @@ import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
 import cloudinary, { isCloudinaryConfigured } from "../utils/cloudinary.js";
 
+const isResumeFile = (file) => {
+    if (!file) return false;
+    const filename = file.originalname?.toLowerCase() || "";
+    return file.mimetype === "application/pdf"
+        || filename.endsWith(".pdf")
+        || file.mimetype === "application/msword"
+        || filename.endsWith(".doc")
+        || file.mimetype === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        || filename.endsWith(".docx");
+};
+
 export const register = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, password, role } = req.body;
@@ -28,7 +39,7 @@ export const register = async (req, res) => {
             });
         }
         const fileUri = getDataUri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content, { resource_type: "auto" });
 
         const user = await User.findOne({ email });
         if (user) {
@@ -61,6 +72,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const { email, password, role } = req.body;
+        const jwtSecret = process.env.SECRET_KEY || "dev-secret-key";
         
         if (!email || !password || !role) {
             return res.status(400).json({
@@ -93,7 +105,15 @@ export const login = async (req, res) => {
         const tokenData = {
             userId: user._id
         }
-        const token = await jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' });
+        const token = await jwt.sign(tokenData, jwtSecret, { expiresIn: '1d' });
+
+        const isProduction = process.env.NODE_ENV === "production";
+        const cookieOptions = {
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax"
+        };
 
         user = {
             _id: user._id,
@@ -104,7 +124,8 @@ export const login = async (req, res) => {
             profile: user.profile
         }
 
-        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpsOnly: true, sameSite: 'strict' }).json({
+        return res.status(200)
+       .cookie("token", token, cookieOptions).json({
             message: `Welcome back ${user.fullname}`,
             user,
             success: true
@@ -115,7 +136,13 @@ export const login = async (req, res) => {
 }
 export const logout = async (req, res) => {
     try {
-        return res.status(200).cookie("token", "", { maxAge: 0 }).json({
+        const isProduction = process.env.NODE_ENV === "production";
+        return res.status(200).cookie("token", "", {
+            maxAge: 0,
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax"
+        }).json({
             message: "Logged out successfully.",
             success: true
         })
@@ -128,21 +155,22 @@ export const updateProfile = async (req, res) => {
         const { fullname, email, phoneNumber, bio, skills } = req.body;
         
         const file = req.file;
-        if (!file) {
-            return res.status(400).json({
-                message: "Resume file is required.",
-                success: false
-            });
-        }
         if (!isCloudinaryConfigured) {
             return res.status(500).json({
                 message: "Cloudinary is not configured. Set CLOUD_NAME, API_KEY, and API_SECRET or their CLOUDINARY_* equivalents.",
                 success: false
             });
         }
-        // cloudinary ayega idhar
-        const fileUri = getDataUri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
+        let cloudResponse = null;
+        if (file) {
+            const fileUri = getDataUri(file);
+            const uploadOptions = { resource_type: "auto" };
+            if (isResumeFile(file)) {
+                uploadOptions.resource_type = "raw";
+            }
+            cloudResponse = await cloudinary.uploader.upload(fileUri.content, uploadOptions);
+        }
 
 
 
@@ -167,9 +195,9 @@ export const updateProfile = async (req, res) => {
         if(skills) user.profile.skills = skillsArray
       
         // resume comes later here...
-        if(cloudResponse){
-            user.profile.resume = cloudResponse.secure_url // save the cloudinary url
-            user.profile.resumeOriginalName = file.originalname // Save the original file name
+        if (cloudResponse) {
+            user.profile.resume = cloudResponse.secure_url; // save the cloudinary url
+            user.profile.resumeOriginalName = file.originalname; // Save the original file name
         }
 
 

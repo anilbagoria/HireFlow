@@ -9,6 +9,34 @@ import axios from 'axios';
 
 const shortlistingStatus = ["Accepted", "Rejected"];
 
+const getResumeUrls = (url) => {
+    if (!url) return { original: url, raw: url };
+    const trimmed = url.trim();
+    if (trimmed.endsWith('.pdf') && trimmed.includes('/image/upload/')) {
+        return {
+            original: trimmed,
+            raw: trimmed.replace('/image/upload/', '/raw/upload/')
+        };
+    }
+    return { original: trimmed, raw: trimmed };
+};
+
+const openResume = async (url) => {
+    const { original, raw } = getResumeUrls(url);
+    if (raw !== original) {
+        try {
+            const response = await fetch(raw, { method: 'HEAD' });
+            if (response.ok) {
+                window.open(raw, '_blank', 'noopener');
+                return;
+            }
+        } catch (error) {
+            // ignore and fall back to original
+        }
+    }
+    window.open(original, '_blank', 'noopener');
+};
+
 const ApplicantsTable = () => {
     const { applicants } = useSelector(store => store.application);
 
@@ -49,7 +77,18 @@ const ApplicantsTable = () => {
                                 <TableCell className='text-slate-300'>{item?.applicant?.phoneNumber}</TableCell>
                                 <TableCell >
                                     {
-                                        item.applicant?.profile?.resume ? <a className='cursor-pointer text-cyan-300 hover:underline' href={item?.applicant?.profile?.resume} target='_blank' rel='noopener noreferrer'>{item?.applicant?.profile?.resumeOriginalName}</a> : <span className='text-slate-400'>NA</span>
+                                        item.applicant?.profile?.resume ? (
+                                            <a
+                                                href={getResumeUrls(item?.applicant?.profile?.resume).raw}
+                                                target='_blank'
+                                                rel='noopener noreferrer'
+                                                className='cursor-pointer text-cyan-300 hover:underline'
+                                            >
+                                                {item?.applicant?.profile?.resumeOriginalName}
+                                            </a>
+                                        ) : (
+                                            <span className='text-slate-400'>NA</span>
+                                        )
                                     }
                                 </TableCell>
                                 <TableCell className='text-slate-300'>{item?.applicant.createdAt.split("T")[0]}</TableCell>

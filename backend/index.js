@@ -13,22 +13,38 @@ dotenv.config();
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+const allowedOrigins = [
+    process.env.FRONTEND_URL,
+    process.env.VITE_FRONTEND_URL,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+].filter(Boolean);
+
 const corsOptions = {
-    origin: [
-        "http://localhost:5173",
-        "https://hire-flow-lake-nine.vercel.app"
-    ],
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+            return;
+        }
+        callback(new Error("Not allowed by CORS"));
+    },
     credentials: true
 };
 
 app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 3000;
+
+app.get("/health", (_req, res) => {
+    res.status(200).json({ status: "ok" });
+});
 
 // api's
 app.use("/api/v1/user", userRoute);

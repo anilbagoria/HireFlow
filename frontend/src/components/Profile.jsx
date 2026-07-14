@@ -8,10 +8,21 @@ import { Label } from './ui/label'
 import AppliedJobTable from './AppliedJobTable'
 import UpdateProfileDialog from './UpdateProfileDialog'
 import { useSelector } from 'react-redux'
-import useGetAppliedJobs from '@/hooks/useGetAppliedJobs'
+import useGetAppliedJobs from '@/components/hooks/useGetAppliedJobs'
 
 // const skills = ["Html", "Css", "Javascript", "Reactjs"]
-const isResume = true;
+const isResume = (user) => Boolean(user?.profile?.resume);
+const getResumeUrls = (url) => {
+    if (!url) return { original: url, raw: url };
+    const trimmed = url.trim();
+    if (trimmed.endsWith('.pdf') && trimmed.includes('/image/upload/')) {
+        return {
+            original: trimmed,
+            raw: trimmed.replace('/image/upload/', '/raw/upload/')
+        };
+    }
+    return { original: trimmed, raw: trimmed };
+};
 
 const Profile = () => {
     useGetAppliedJobs();
@@ -57,7 +68,18 @@ const Profile = () => {
                 <div className='grid w-full max-w-sm items-center gap-1.5'>
                     <Label className='text-md font-bold text-white'>Resume</Label>
                     {
-                        isResume ? <a target='blank' href={user?.profile?.resume} className='w-full cursor-pointer text-cyan-300 hover:underline'>{user?.profile?.resumeOriginalName}</a> : <span className='text-slate-400'>NA</span>
+                        isResume(user) ? (
+                            <a
+                                href={getResumeUrls(user?.profile?.resume).raw}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='w-full text-left text-cyan-300 hover:underline'
+                            >
+                                {user?.profile?.resumeOriginalName}
+                            </a>
+                        ) : (
+                            <span className='text-slate-400'>NA</span>
+                        )
                     }
                 </div>
             </div>
